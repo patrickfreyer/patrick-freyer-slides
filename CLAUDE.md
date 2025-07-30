@@ -53,13 +53,9 @@ This is an automated slide creation system that converts HTML slides to PNG imag
 <!-- Basic full-width layout (most common) -->
 <div class="basic-background-section">
 
-<!-- Two-column with arrow shapes -->
+<!-- Two-column with left arrow and basic right section -->
 <div class="arrow-background-section-left">
-<div class="arrow-background-section-right">
-
-<!-- Two-column with left arrow and clean right section -->
-<div class="arrow-background-section-left">
-<div class="highlights-background-section-right">
+<div class="basic-background-section">
 
 <!-- Agenda/chapter layout -->
 <div class="slide-container agenda-slide">
@@ -67,10 +63,12 @@ This is an automated slide creation system that converts HTML slides to PNG imag
   <div class="main-content-section">
 ```
 
-#### Background Section Usage Tips
-- **arrow-background-section-left + arrow-background-section-right**: Creates two arrow shapes pointing toward each other. Both sections get themed backgrounds.
-- **arrow-background-section-left + highlights-background-section-right**: Creates left arrow pointing into clean white section. Better for content flow and readability.
-- Use the arrow-left + highlights-right combination when you want to draw attention from the left section to detailed content on the right.
+#### Background Section Usage Rules
+- **ALWAYS use exactly one special section + one basic-background-section**
+- **Never combine two special sections** (like arrow-left + arrow-right or arrow-left + highlights-right)
+- **arrow-background-section-left + basic-background-section**: Creates left arrow pointing into clean content area
+- The special section draws attention, the basic section provides clean content space
+- This maintains proper visual hierarchy and readability
 
 ### Typography
 ```html

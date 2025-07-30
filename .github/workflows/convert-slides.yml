@@ -76,22 +76,66 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
 
-    - name: Check for HTML files in slides directory
+    - name: Detect changed HTML files
       id: check-files
       run: |
-        if [ "$(find slides -name '*.html' -type f | wc -l)" -gt 0 ]; then
+        echo "Checking for changed HTML files..."
+        
+        # Get changed files from git (comparing with previous commit)
+        if [ "${{ github.event_name }}" = "push" ]; then
+          # For push events, compare current commit with previous
+          if [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
+            changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep 'slides/.*\.html$' || true)
+          else
+            # First commit, get all HTML files
+            changed_files=$(find slides -name '*.html' -type f 2>/dev/null || true)
+          fi
+        elif [ "${{ github.event_name }}" = "pull_request" ]; then
+          # For PR events, compare with base branch
+          changed_files=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep 'slides/.*\.html$' || true)
+        else
+          # Manual trigger or other events - process all files
+          changed_files=$(find slides -name '*.html' -type f 2>/dev/null || true)
+        fi
+        
+        if [ -n "$changed_files" ]; then
           echo "has_html_files=true" >> $GITHUB_OUTPUT
-          echo "Found HTML files to convert:"
-          find slides -name '*.html' -type f
+          echo "Found changed HTML files:"
+          echo "$changed_files"
+          
+          # Save changed files for next step (space-separated, properly quoted)
+          echo "changed_files<<EOF" >> $GITHUB_OUTPUT
+          echo "$changed_files" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         else
           echo "has_html_files=false" >> $GITHUB_OUTPUT
-          echo "No HTML files found in slides directory"
+          echo "No HTML files changed"
         fi
 
     - name: Convert HTML slides to images and PDFs
       if: steps.check-files.outputs.has_html_files == 'true'
       run: |
-        node export.js slides
+        # Convert newline-separated changed files to space-separated arguments
+        changed_files="${{ steps.check-files.outputs.changed_files }}"
+        
+        if [ -n "$changed_files" ]; then
+          echo "Converting specific changed files..."
+          # Convert to arguments for the --files flag
+          files_args=""
+          while IFS= read -r file; do
+            if [ -n "$file" ]; then
+              files_args="$files_args \"$file\""
+            fi
+          done <<< "$changed_files"
+          
+          if [ -n "$files_args" ]; then
+            eval "node export.js --files $files_args"
+          else
+            echo "No valid files to process"
+          fi
+        else
+          echo "No files to convert"
+        fi
       env:
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
         PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
@@ -129,11 +173,11 @@ jobs:
           # Generate commit message based on changed slide files
           echo "Generating commit message..."
           
-          # Get list of HTML files that were changed (from the trigger)
-          changed_slides=$(git diff --name-only HEAD~1 HEAD | grep 'slides/.*\.html$' | head -3)
+          # Use the changed files detected earlier
+          changed_slides="${{ steps.check-files.outputs.changed_files }}"
           
           if [ -z "$changed_slides" ]; then
-            # Fallback: find all HTML files in slides directory
+            # Fallback: find recently modified HTML files
             changed_slides=$(find slides -name '*.html' -type f | head -3)
           fi
           

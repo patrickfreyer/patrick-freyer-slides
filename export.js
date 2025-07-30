@@ -440,6 +440,44 @@ function findHtmlFilesRecursively(dir) {
   return htmlFiles;
 }
 
+// Check if HTML file is newer than its generated outputs
+function isHtmlFileNewer(htmlFile) {
+  try {
+    const baseName = path.basename(htmlFile, '.html');
+    const baseDir = path.dirname(htmlFile);
+    const pngFile = path.join(baseDir, `${baseName}.png`);
+    const pdfFile = path.join(baseDir, `${baseName}.pdf`);
+    
+    // Get HTML file modification time
+    const htmlStat = fs.statSync(htmlFile);
+    const htmlTime = htmlStat.mtime.getTime();
+    
+    // Check if PNG exists and is newer
+    let pngExists = false;
+    let pngTime = 0;
+    if (fs.existsSync(pngFile)) {
+      pngExists = true;
+      const pngStat = fs.statSync(pngFile);
+      pngTime = pngStat.mtime.getTime();
+    }
+    
+    // Check if PDF exists and is newer
+    let pdfExists = false;
+    let pdfTime = 0;
+    if (fs.existsSync(pdfFile)) {
+      pdfExists = true;
+      const pdfStat = fs.statSync(pdfFile);
+      pdfTime = pdfStat.mtime.getTime();
+    }
+    
+    // Return true if HTML is newer than outputs or outputs don't exist
+    return !pngExists || !pdfExists || htmlTime > pngTime || htmlTime > pdfTime;
+  } catch (error) {
+    // If we can't check, assume we need to regenerate
+    return true;
+  }
+}
+
 // Main export function for processing multiple HTML files
 export async function exportSlides(slidesDirectory = './slides', options = {}) {
   const config = { ...defaultConfig, ...options };
@@ -447,15 +485,34 @@ export async function exportSlides(slidesDirectory = './slides', options = {}) {
   console.log('🚀 Starting slide export...\n');
   
   try {
-    // Find all HTML files in the slides directory (including subdirectories)
-    const htmlFiles = findHtmlFilesRecursively(slidesDirectory);
+    let htmlFiles;
     
-    if (htmlFiles.length === 0) {
-      console.log('No HTML files found in slides directory.');
-      return { success: false, message: 'No files to export' };
+    // Check if specific files were provided via options
+    if (options.specificFiles && Array.isArray(options.specificFiles)) {
+      htmlFiles = options.specificFiles.filter(file => file.endsWith('.html') && fs.existsSync(file));
+      console.log(`Processing ${htmlFiles.length} specific files provided via options`);
+    } else {
+      // Find all HTML files in the slides directory (including subdirectories)
+      htmlFiles = findHtmlFilesRecursively(slidesDirectory);
+      
+      // Filter to only files that have changed (unless forced)
+      if (!options.forceAll) {
+        const originalCount = htmlFiles.length;
+        htmlFiles = htmlFiles.filter(isHtmlFileNewer);
+        const skippedCount = originalCount - htmlFiles.length;
+        
+        if (skippedCount > 0) {
+          console.log(`⏭️  Skipped ${skippedCount} unchanged files (outputs are up-to-date)`);
+        }
+      }
     }
     
-    console.log(`Found ${htmlFiles.length} HTML files:`);
+    if (htmlFiles.length === 0) {
+      console.log('No HTML files need processing.');
+      return { success: true, message: 'No files need processing - all outputs are up-to-date' };
+    }
+    
+    console.log(`Found ${htmlFiles.length} HTML files to process:`);
     htmlFiles.forEach(file => console.log(`  - ${path.basename(file)}`));
     console.log('');
     
@@ -503,6 +560,22 @@ export async function exportSlides(slidesDirectory = './slides', options = {}) {
 
 // CLI usage
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const slidesDir = process.argv[2] || './slides';
-  exportSlides(slidesDir).catch(console.error);
+  const args = process.argv.slice(2);
+  
+  if (args.length === 0) {
+    // Default: process all slides in default directory
+    exportSlides('./slides').catch(console.error);
+  } else if (args[0] === '--files' && args.length > 1) {
+    // Process specific files: node export.js --files file1.html file2.html
+    const specificFiles = args.slice(1);
+    exportSlides('./slides', { specificFiles }).catch(console.error);
+  } else if (args[0] === '--force') {
+    // Force process all files: node export.js --force [directory]
+    const slidesDir = args[1] || './slides';
+    exportSlides(slidesDir, { forceAll: true }).catch(console.error);
+  } else {
+    // Default: treat first argument as directory
+    const slidesDir = args[0];
+    exportSlides(slidesDir).catch(console.error);
+  }
 }

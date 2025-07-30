@@ -109,6 +109,26 @@ Check the `sample-slides/` directory for examples of:
 - **GitHub Actions**: Ubuntu runner with Chrome stable
 - **Node.js**: ES modules with async/await
 
+## 🤖 AI Assistance & Agents
+
+### Dedicated Claude Agents
+This repository includes specialized Claude agents in `.claude/agents/` for slide-related tasks:
+
+- **BCG Slide Reviewer** (`.claude/agents/bcg-slide-reviewer.md`): Comprehensive quality review against BCG professional standards
+- **Custom Agents**: Create additional agents for content generation, design validation, or brand compliance
+
+### Usage
+Claude can automatically use these agents when appropriate, or you can request specific agent assistance:
+- "Please review this slide with the BCG reviewer agent"
+- "Use the slide reviewer to check my presentation"
+
+### Creating Custom Agents
+Add new `.md` files to `.claude/agents/` with specialized instructions for:
+- Industry-specific content generation
+- Design pattern validation  
+- Accessibility compliance
+- Brand guideline enforcement
+
 ## 📝 License
 
 MIT License - Feel free to use and modify for your presentations.

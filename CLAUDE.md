@@ -239,4 +239,32 @@ npm run convert-sample
 - Generated PNG/PDF files appear automatically
 - Review generated files for quality
 
+## Dedicated Agents
+
+This repository includes dedicated Claude agents in `.claude/agents/` for specialized slide-related tasks:
+
+### BCG Slide Reviewer Agent
+- **File**: `.claude/agents/bcg-slide-reviewer.md`
+- **Purpose**: Comprehensive quality review of HTML slides against BCG professional standards
+- **Usage**: Use when you need detailed feedback on slide design, layout, content structure, and compliance
+- **Features**: Systematic checklist covering visual hierarchy, messaging, alignment, visibility, charts, and boundaries
+
+### Creating Additional Agents
+You can create custom agents for specific slide-related tasks:
+
+```markdown
+---
+name: slide-content-generator
+description: Generates slide content for specific business scenarios
+---
+
+[Agent instructions here...]
+```
+
+Common agent types for slide creation:
+- **Content generators**: Create slide content for specific industries/topics
+- **Design validators**: Check specific design patterns or layouts
+- **Brand compliance**: Ensure adherence to specific company guidelines
+- **Accessibility reviewers**: Verify slides meet accessibility standards
+
 This system enables rapid creation of professional, branded slides with automatic conversion to multiple formats. Follow these guidelines to ensure consistency and quality across all presentations.

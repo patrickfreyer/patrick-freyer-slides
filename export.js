@@ -186,6 +186,26 @@ function addPdfOptimizations(htmlContent) {
         background-color: transparent !important;
       }
       
+      /* Remove body centering and slide margins for PDF to fit exactly */
+      body {
+        display: block !important;
+        align-items: unset !important;
+        justify-content: unset !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 900px !important;
+        width: 1600px !important;
+      }
+      
+      .slide-container {
+        margin: 0 !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 1600px !important;
+        height: 900px !important;
+      }
+      
       /* Preserve icon and number ball backgrounds */
       .icon-and-number-ball {
         background-color: var(--bcg-green) !important;

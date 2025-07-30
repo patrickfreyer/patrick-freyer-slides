@@ -133,6 +133,13 @@ jobs:
           
           Co-Authored-By: GitHub Action <action@github.com>"
           
+          echo "Pulling latest changes before push..."
+          git pull origin main --no-edit || {
+            echo "Pull failed, checking for conflicts..."
+            git status
+            exit 1
+          }
+          
           echo "Pushing to remote..."
           git push origin main || {
             echo "Push failed, checking status..."

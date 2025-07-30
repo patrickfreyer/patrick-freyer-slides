@@ -19,6 +19,7 @@ This is an automated slide creation system that converts HTML slides to PNG imag
 - Start with `templates/EmptySlide.html` 
 - Never create slides from scratch
 - The template includes all necessary CSS inline (do not reference external stylesheets)
+- You may add CSS styles inline as needed
 
 ### 2. File Naming Conventions
 - Use kebab-case: `market-analysis-2025.html`

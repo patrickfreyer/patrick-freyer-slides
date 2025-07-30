@@ -57,11 +57,20 @@ This is an automated slide creation system that converts HTML slides to PNG imag
 <div class="arrow-background-section-left">
 <div class="arrow-background-section-right">
 
+<!-- Two-column with left arrow and clean right section -->
+<div class="arrow-background-section-left">
+<div class="highlights-background-section-right">
+
 <!-- Agenda/chapter layout -->
 <div class="slide-container agenda-slide">
   <div class="decorative-left-section">
   <div class="main-content-section">
 ```
+
+#### Background Section Usage Tips
+- **arrow-background-section-left + arrow-background-section-right**: Creates two arrow shapes pointing toward each other. Both sections get themed backgrounds.
+- **arrow-background-section-left + highlights-background-section-right**: Creates left arrow pointing into clean white section. Better for content flow and readability.
+- Use the arrow-left + highlights-right combination when you want to draw attention from the left section to detailed content on the right.
 
 ### Typography
 ```html

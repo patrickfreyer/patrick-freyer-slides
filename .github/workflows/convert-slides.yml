@@ -151,7 +151,7 @@ jobs:
           git commit -m "$commit_msg"
           
           echo "Pulling latest changes before push..."
-          git pull origin main --no-edit || {
+          git pull origin main --rebase --no-edit || {
             echo "Pull failed, checking for conflicts..."
             git status
             exit 1

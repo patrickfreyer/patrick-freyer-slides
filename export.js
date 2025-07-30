@@ -161,7 +161,7 @@ function readLocalHtmlFile(filePath) {
 
 // Function to add PDF-specific optimizations to HTML content
 function addPdfOptimizations(htmlContent) {
-  // Add PDF-specific CSS rules to improve rendering
+  // Add PDF-specific CSS rules to improve rendering - conservative approach from working version
   const pdfOptimizationCSS = `
     <style>
       /* PDF Optimization Styles */
@@ -181,29 +181,9 @@ function addPdfOptimizations(htmlContent) {
         box-shadow: none !important;
       }
       
-      /* Ensure transparent backgrounds stay transparent, but preserve important styled elements */
-      * {
-        background-color: transparent !important;
-      }
-      
-      /* Remove body centering and slide margins for PDF to fit exactly */
-      body {
-        display: block !important;
-        align-items: unset !important;
-        justify-content: unset !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        height: 900px !important;
-        width: 1600px !important;
-      }
-      
+      /* Remove slide margins for PDF to fit exactly */
       .slide-container {
         margin: 0 !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 1600px !important;
-        height: 900px !important;
       }
       
       /* Preserve icon and number ball backgrounds */
@@ -219,6 +199,48 @@ function addPdfOptimizations(htmlContent) {
       
       .agenda-item.inactive .agenda-arrow {
         background-color: var(--bcg-light-gray) !important;
+      }
+      
+      /* Preserve any other circular background elements */
+      .icon-and-number-ball-inline {
+        background-color: transparent !important;
+        border: 2px solid var(--section-title-color) !important;
+      }
+      
+      /* Improve gradient rendering in PDF */
+      .slide-container,
+      [style*="gradient"] {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      /* Fix Font Awesome icons for PDF */
+      .fas, .far, .fab, .fal {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+      }
+      
+      /* Force background images to render */
+      .decorative-left-section, .background-overlay {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      
+      /* Fallback for external images that fail to load */
+      .decorative-left-section {
+        background-color: var(--bcg-green) !important;
+      }
+      
+      .background-overlay {
+        background-color: rgba(0, 0, 0, 0.3) !important;
+      }
+      
+      /* Improve clip-path rendering */
+      .arrow-background-section-left,
+      .arrow-background-section-right {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
       }
       
       /* Remove any filter effects that might cause artifacts */

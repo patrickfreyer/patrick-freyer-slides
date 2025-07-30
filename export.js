@@ -130,7 +130,7 @@ async function launchBrowser() {
 
 // Default configuration for slide exports
 export const defaultConfig = {
-  // PDF options - Custom dimensions to match slide container (1600x900px)
+  // PDF options - Custom dimensions to match slide container (1600x900px = 16.67x9.375 inches at 96 DPI)
   width: 1600,
   height: 900,
   printBackground: true,
@@ -286,9 +286,13 @@ export async function convertHtmlToPdf(browser, htmlFilePath, outputPath, config
     });
     
     // Generate PDF with exact slide dimensions
+    // Convert pixel dimensions to inches (96 DPI standard)
+    const widthInches = config.width / 96;
+    const heightInches = config.height / 96;
+    
     const pdfBuffer = await page.pdf({
-      width: config.width,
-      height: config.height,
+      width: `${widthInches}in`,
+      height: `${heightInches}in`,
       printBackground: config.printBackground,
       margin: config.margin,
       preferCSSPageSize: false

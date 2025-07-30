@@ -126,14 +126,29 @@ jobs:
         if git diff --staged --quiet; then
           echo "No new files to commit"
         else
-          echo "Committing generated/updated files..."
-          git commit -m "Auto-generate images and PDFs from HTML slides
-
-          Updates existing exports when slides are modified.
-
-          🤖 Generated with GitHub Actions
+          # Generate commit message based on changed slide files
+          echo "Generating commit message..."
           
-          Co-Authored-By: GitHub Action <action@github.com>"
+          # Get list of HTML files that were changed (from the trigger)
+          changed_slides=$(git diff --name-only HEAD~1 HEAD | grep 'slides/.*\.html$' | head -3)
+          
+          if [ -z "$changed_slides" ]; then
+            # Fallback: find all HTML files in slides directory
+            changed_slides=$(find slides -name '*.html' -type f | head -3)
+          fi
+          
+          # Create commit message based on number of slides
+          slide_count=$(echo "$changed_slides" | wc -l)
+          
+          if [ $slide_count -eq 1 ]; then
+            slide_name=$(echo "$changed_slides" | head -1 | sed 's|slides/||' | sed 's|\.html$||')
+            commit_msg="Export of slide $slide_name to pdf & image"
+          else
+            commit_msg="Export of $slide_count slides to pdf & image"
+          fi
+          
+          echo "Committing with message: $commit_msg"
+          git commit -m "$commit_msg"
           
           echo "Pulling latest changes before push..."
           git pull origin main --no-edit || {

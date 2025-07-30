@@ -6,6 +6,8 @@ An automated HTML slide creation system with GitHub Actions integration for conv
 
 ```
 ├── slides/              # Put your HTML slides here (auto-converted)
+│   ├── deck-1/         # Example: Organize by deck/topic
+│   └── presentation-2/ # Subdirectories are fully supported
 ├── sample-slides/       # Example slides demonstrating different layouts
 ├── templates/           # Slide templates (EmptySlide.html)
 ├── slide-making-rules/  # Documentation and guidelines
@@ -15,7 +17,7 @@ An automated HTML slide creation system with GitHub Actions integration for conv
 
 ## 🚀 Quick Start
 
-1. **Create a new slide**: Copy `templates/EmptySlide.html` to the `slides/` directory
+1. **Create a new slide**: Copy `templates/EmptySlide.html` to the `slides/` directory (or any subdirectory)
 2. **Edit your slide**: Modify the HTML content within the template
 3. **Commit and push**: GitHub Actions will automatically generate PNG and PDF versions
 4. **Find your files**: Generated images and PDFs appear alongside your HTML files
@@ -56,9 +58,14 @@ Start with the `templates/EmptySlide.html` which includes:
 ### GitHub Actions Workflow
 
 The repository automatically converts HTML slides when:
-- HTML files are added/modified in the `slides/` directory
+- HTML files are added/modified in the `slides/` directory (including subdirectories)
 - Changes are pushed to the repository
 - Manually triggered via GitHub Actions
+
+**Subdirectory Support**: You can organize slides in subdirectories like:
+- `slides/product-deck/overview.html`
+- `slides/quarterly-review/q1-results.html`
+- `slides/training/module-1/intro.html`
 
 ### Local Development
 
@@ -82,9 +89,10 @@ For each `slide-name.html` file, the system creates:
 ## 🎯 Best Practices
 
 1. **File Naming**: Use descriptive, kebab-case names (`market-analysis-2025.html`)
-2. **Content Guidelines**: Follow BCG brand standards defined in the CSS
-3. **Responsive Design**: Slides are optimized for 1600x900px (16:9 aspect ratio)
-4. **Version Control**: HTML files are source of truth; generated files are auto-committed
+2. **Directory Organization**: Group related slides in subdirectories (`slides/deck-name/`)
+3. **Content Guidelines**: Follow BCG brand standards defined in the CSS
+4. **Responsive Design**: Slides are optimized for 1600x900px (16:9 aspect ratio)
+5. **Version Control**: HTML files are source of truth; generated files are auto-committed
 
 ## 📚 Examples
 

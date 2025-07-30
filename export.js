@@ -375,6 +375,27 @@ export async function convertHtmlToImage(browser, htmlFilePath, outputPath, conf
   }
 }
 
+// Function to recursively find HTML files in directories
+function findHtmlFilesRecursively(dir) {
+  let htmlFiles = [];
+  
+  const items = fs.readdirSync(dir);
+  
+  for (const item of items) {
+    const fullPath = path.join(dir, item);
+    const stat = fs.statSync(fullPath);
+    
+    if (stat.isDirectory()) {
+      // Recursively search subdirectories
+      htmlFiles = htmlFiles.concat(findHtmlFilesRecursively(fullPath));
+    } else if (item.endsWith('.html')) {
+      htmlFiles.push(fullPath);
+    }
+  }
+  
+  return htmlFiles;
+}
+
 // Main export function for processing multiple HTML files
 export async function exportSlides(slidesDirectory = './slides', options = {}) {
   const config = { ...defaultConfig, ...options };
@@ -382,10 +403,8 @@ export async function exportSlides(slidesDirectory = './slides', options = {}) {
   console.log('🚀 Starting slide export...\n');
   
   try {
-    // Find all HTML files in the slides directory
-    const htmlFiles = fs.readdirSync(slidesDirectory)
-      .filter(file => file.endsWith('.html'))
-      .map(file => path.join(slidesDirectory, file));
+    // Find all HTML files in the slides directory (including subdirectories)
+    const htmlFiles = findHtmlFilesRecursively(slidesDirectory);
     
     if (htmlFiles.length === 0) {
       console.log('No HTML files found in slides directory.');

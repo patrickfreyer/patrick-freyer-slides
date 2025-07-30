@@ -17,6 +17,7 @@ This is an automated slide creation system that converts HTML slides to PNG imag
 
 ### 1. Always Use the Template
 - Start with `templates/EmptySlide.html` 
+- You can make your life easier by copying over this template and iterating on it
 - Never create slides from scratch
 - The template includes all necessary CSS inline (do not reference external stylesheets)
 - You may add CSS styles inline as needed

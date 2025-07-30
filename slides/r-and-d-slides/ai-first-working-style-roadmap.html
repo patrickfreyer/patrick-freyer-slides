@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Agenda Today - Chapter Divider</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
+                :root {
             /* Colors */
             --bcg-green: #40916c;
             --bcg-white: #f4f4f4;
@@ -25,12 +25,12 @@
         }
 
         /* 
-        * SLIDE THEMES - Apply to .slide-container to change entire slide appearance
-        * 
-        * Usage: <div class="slide-container slide-theme-white">
-        * 
-        * All themes automatically handle container, arrow, title, and text colors
-        */
+         * SLIDE THEMES - Apply to .slide-container to change entire slide appearance
+         * 
+         * Usage: <div class="slide-container slide-theme-white">
+         * 
+         * All themes automatically handle container, arrow, title, and text colors
+         */
         .slide-theme-green {
             --slide-bg-color: var(--bcg-green-gradient);
             --section-bg-color: var(--bcg-white);
@@ -115,14 +115,14 @@
         }
 
         /* 
-        * SLIDE LAYOUT SECTIONS - Define slide structure and backgrounds
-        * 
-        * Choose the appropriate section type for your slide layout:
-        */
+         * SLIDE LAYOUT SECTIONS - Define slide structure and backgrounds
+         * 
+         * Choose the appropriate section type for your slide layout:
+         */
 
         /* BASIC LAYOUT - Full-width single section (most common) 
-        * Usage: <div class="basic-background-section">
-        * Use for: Simple slides with title and content in one area */
+         * Usage: <div class="basic-background-section">
+         * Use for: Simple slides with title and content in one area */
         .basic-background-section {
             width: 100%;
             height: 100%;
@@ -136,8 +136,8 @@
         }
 
         /* LEFT ARROW SECTION - Left section with arrow pointing right
-        * Usage: <div class="arrow-background-section-left"> + <div class="arrow-background-section-right">
-        * Use for: Two-column layout with main content on left, highlights on right */
+         * Usage: <div class="arrow-background-section-left"> + <div class="arrow-background-section-right">
+         * Use for: Two-column layout with main content on left, highlights on right */
         .arrow-background-section-left {
             width: 600px;
             background: var(--section-bg-color);
@@ -151,8 +151,8 @@
         }
 
         /* RIGHT ARROW SECTION - Right section with arrow pointing left
-        * Usage: Pair with arrow-background-section-left for two-column arrow layout
-        * Use for: Key takeaways, highlights, or secondary content */
+         * Usage: Pair with arrow-background-section-left for two-column arrow layout
+         * Use for: Key takeaways, highlights, or secondary content */
         .arrow-background-section-right {
             min-width: 600px;
             background: var(--section-bg-color);
@@ -166,8 +166,8 @@
         }
 
         /* RIGHT HIGHLIGHTS SECTION - Similar to arrow-right but no arrow shape
-        * Usage: <div class="highlights-background-section-right">
-        * Use for: Side panels, takeaways without arrow visual */
+         * Usage: <div class="highlights-background-section-right">
+         * Use for: Side panels, takeaways without arrow visual */
         .highlights-background-section-right {
             min-width: 600px;
             background: var(--section-bg-color);
@@ -180,17 +180,17 @@
         }
 
         /* 
-        * AGENDA SLIDE LAYOUT - Special layout for agenda/chapter divider slides
-        * 
-        * Usage: Add "agenda-slide" class to slide-container
-        * <div class="slide-container slide-theme-white agenda-slide">
-        *   <div class="decorative-left-section">
-        *   <div class="main-content-section">
-        */
+         * AGENDA SLIDE LAYOUT - Special layout for agenda/chapter divider slides
+         * 
+         * Usage: Add "agenda-slide" class to slide-container
+         * <div class="slide-container slide-theme-white agenda-slide">
+         *   <div class="decorative-left-section">
+         *   <div class="main-content-section">
+         */
 
         /* DECORATIVE LEFT SECTION - Image background with overlay
-        * Usage: <div class="decorative-left-section" style="background-image: url(...)">
-        * Use for: Visual left panel with title overlay */
+         * Usage: <div class="decorative-left-section" style="background-image: url(...)">
+         * Use for: Visual left panel with title overlay */
         .decorative-left-section {
             background-size: cover;
             background-position: center;
@@ -215,8 +215,8 @@
         }
 
         /* MAIN CONTENT SECTION - Right panel for agenda items
-        * Usage: <div class="main-content-section">
-        * Use for: Agenda items, chapter content on right side */
+         * Usage: <div class="main-content-section">
+         * Use for: Agenda items, chapter content on right side */
         .main-content-section {
             background: var(--bcg-white);
             padding: 80px 100px 80px 120px;
@@ -521,7 +521,7 @@
             margin: 0 -20px 20px 0;
             text-align: left;
         }
-
+        
         .chevron-continuing {
             min-width: 100px;
             background: var(--section-bg-color);
@@ -559,17 +559,17 @@
         }
 
         /* 
-        * THEME UTILITY CLASSES - Shorter aliases for theme switching
-        * 
-        * Usage: <div class="slide-container theme-white">
-        * 
-        * Same functionality as slide-theme-* classes but with shorter names:
-        * - theme-white: Same as slide-theme-white
-        * - theme-green: Same as slide-theme-green  
-        * - theme-gray: Same as slide-theme-gray
-        * - theme-dark: Same as slide-theme-dark
-        */
-
+         * THEME UTILITY CLASSES - Shorter aliases for theme switching
+         * 
+         * Usage: <div class="slide-container theme-white">
+         * 
+         * Same functionality as slide-theme-* classes but with shorter names:
+         * - theme-white: Same as slide-theme-white
+         * - theme-green: Same as slide-theme-green  
+         * - theme-gray: Same as slide-theme-gray
+         * - theme-dark: Same as slide-theme-dark
+         */
+        
         .theme-white { 
             --slide-bg-color: var(--bcg-white);
             --section-bg-color: var(--bcg-green-gradient);
@@ -579,7 +579,7 @@
             --body-text-color: var(--bcg-black);
             --page-number-color: var(--bcg-dark-gray);
         }
-
+        
         .theme-green { 
             --slide-bg-color: var(--bcg-green-gradient);
             --section-bg-color: var(--bcg-white);
@@ -589,7 +589,7 @@
             --page-number-color: var(--bcg-light-gray);
             --body-text-color: var(--bcg-black);
         }
-
+        
         .theme-gray { 
             --slide-bg-color: var(--bcg-light-gray);
             --section-bg-color: var(--bcg-green-gradient);
@@ -599,7 +599,7 @@
             --body-text-color: var(--bcg-black);
             --page-number-color: var(--bcg-dark-gray);
         }
-
+        
         .theme-dark { 
             --slide-bg-color: var(--bcg-black);
             --section-bg-color: var(--bcg-green-gradient);
@@ -730,47 +730,83 @@
             font-weight: 500;
             letter-spacing: 1px;
         }
-        </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        .decorative-left-section {
-            background-image: url('https://images.unsplash.com/photo-1470217957101-da7150b9b681?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
-        }
     </style>
 </head>
 <body>
-    <div class="slide-container slide-theme-white agenda-slide">
-        
-        <div class="decorative-left-section">
-            <h1 class="main-title left-section-title">Our Agenda Today</h1>
+    <div class="slide-container slide-theme-white">
+        <!-- Left Section: North Star & Context with Green Background -->
+        <div class="arrow-background-section-left">
+            <div>
+                <h1 class="arrow-title">
+                    <i class="fas fa-star" style="margin-right: 15px;"></i>
+                    North Star Vision
+                </h1>
+                <div class="standard-text" style="color: var(--bcg-black); font-size: var(--text-md); margin-bottom: 30px;">
+                    <div class="bullet-point" style="color: var(--bcg-black);">We are working towards a future where an "AI-first" working style has agents doing the grunt work, freeing up our consultants to do "people" work and act as agent orchestrators</div>
+                    <div class="bullet-point" style="color: var(--bcg-black);">Agents act as members of the team, not just tools</div>
+                    <div class="bullet-point" style="color: var(--bcg-black);">Human consultants focus on relationship management, strategic thinking, and complex problem-solving</div>
+                </div>
+
+                <h2 class="section-title" style="color: var(--bcg-green); margin-top: 25px;">
+                    <i class="fas fa-lightbulb" style="margin-right: 10px;"></i>
+                    Context & Approach
+                </h2>
+                <div class="standard-text" style="color: var(--bcg-black); font-size: var(--text-md);">
+                    <div class="bullet-point" style="color: var(--bcg-black);">An agent-enabled Kanban board is currently the best platform to model and develop this future way of working</div>
+                    <div class="bullet-point" style="color: var(--bcg-black);">Kanban board fits the existing mental model of consulting teams wherein work is tracked, assigned, and iterated upon</div>
+                    <div class="bullet-point" style="color: var(--bcg-black);">Agents and agent-tools required to realize this vision fall into three buckets that flow together: <span class="text-bold">Input → Reasoning → Output</span></div>
+                </div>
+            </div>
         </div>
-        
-        <div class="main-content-section">
-            <div class="agenda-items">
-                <div class="agenda-item active">
-                    <div class="agenda-arrow">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div>Bring to life value creation via GenAI</div>
-                </div>
+
+        <!-- Right Section: Required Tools & Agents Detail -->
+        <div class="arrow-background-section-right">
+            <div>
+                <h1 class="arrow-title">
+                    <i class="fas fa-tools" style="margin-right: 15px;"></i>
+                    Required Tools & Agents
+                </h1>
                 
-                <div class="agenda-item inactive">
-                    <div class="agenda-arrow">
-                        <i class="fas fa-chevron-right"></i>
+                <div style="margin-bottom: 25px;">
+                    <h2 class="section-title" style="color: var(--bcg-green); font-size: var(--text-lg);">
+                        1. Information Input
+                    </h2>
+                    <div class="standard-text" style="font-size: var(--text-sm); color: var(--bcg-black); margin-bottom: 15px;">
+                        Context given to the reasoner – split into "scopes" of knowledge from personal → case → BCG → global
                     </div>
-                    <div>Share you with latest insights from hot-off-the-press BFF x AI research</div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">Personal knowledge management tool (notes, files) - <span style="color: var(--bcg-dark-gray); font-style: italic;">Not BCG-differentiated, do not pursue</span></div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">Case knowledge management tool (people, workstreams, meetings, emails, transcripts) - <span class="text-bold" style="color: var(--bcg-green);">High Priority</span></div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">BCG knowledge querying and retrieval tool (fast, reliable, precise) - <span class="text-bold" style="color: var(--bcg-green);">High Priority</span></div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">External knowledge search tool (web, financial data, statistics) - <span style="color: var(--bcg-dark-gray); font-style: italic;">Not BCG-differentiated, do not pursue</span></div>
                 </div>
-                
-                <div class="agenda-item inactive">
-                    <div class="agenda-arrow">
-                        <i class="fas fa-chevron-right"></i>
+
+                <div style="margin-bottom: 25px;">
+                    <h2 class="section-title" style="color: var(--bcg-green); font-size: var(--text-lg);">
+                        2. Reasoning & Processing
+                    </h2>
+                    <div class="standard-text" style="font-size: var(--text-sm); color: var(--bcg-black); margin-bottom: 15px;">
+                        Reasoning is largely commoditized. Opportunity to "steer" reasoning in a BCG fashion by influencing:
                     </div>
-                    <div>Equip you with our toolkit to get started</div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">What work is done (tasks brought onto the kanban board) - <span style="color: var(--bcg-dark-gray);">Medium Priority</span></div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">How the work is done (prewritten task contents, agent assignments for research, content drafting, financial modeling, etc.) - <span class="text-bold" style="color: var(--bcg-green);">High Priority</span></div>
+                </div>
+
+                <div>
+                    <h2 class="section-title" style="color: var(--bcg-green); font-size: var(--text-lg);">
+                        3. Result Output
+                    </h2>
+                    <div class="standard-text" style="font-size: var(--text-sm); color: var(--bcg-black); margin-bottom: 15px;">
+                        Format in which reasoning manifests (slides account for vast majority of our output TODAY):
+                    </div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">Slide creation tool to draft and iterate slides in exportable format (pdf, image, pptx) - <span class="text-bold" style="color: var(--bcg-green);">High Priority</span></div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">Email tool & account access for drafts and calendar invites - <span style="color: var(--bcg-dark-gray);">Medium Priority, non-differentiated except as connector</span></div>
+                    <div class="bullet-point" style="color: var(--bcg-black); font-size: var(--text-sm);">Interview guide generation and other specialized outputs</div>
                 </div>
             </div>
         </div>
         
-        <div class="page-number">0</div>
+        <div class="page-number">1</div>
+        <div class="footnote">Source: R&D Strategy Development</div>
     </div>
 </body>
-</html> 
+</html>

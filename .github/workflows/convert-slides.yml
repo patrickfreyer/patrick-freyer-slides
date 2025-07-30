@@ -12,12 +12,15 @@ on:
 jobs:
   convert-slides:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Allow the action to push commits
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Debug - List files
       run: |
@@ -109,8 +112,9 @@ jobs:
     - name: Commit generated files
       if: steps.check-files.outputs.has_html_files == 'true'
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+        git config --global user.name "GitHub Action"
+        git config --global --add safe.directory /github/workspace
         
         # Add generated files (including in subdirectories)
         echo "Adding generated files to git..."
@@ -134,7 +138,12 @@ jobs:
           Co-Authored-By: GitHub Action <action@github.com>"
           
           echo "Pushing to remote..."
-          git push
+          git push origin main || {
+            echo "Push failed, checking status..."
+            git status
+            git log --oneline -5
+            exit 1
+          }
         fi
 
     - name: Create summary

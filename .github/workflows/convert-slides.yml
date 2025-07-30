@@ -194,15 +194,19 @@ jobs:
           echo "Committing with message: $commit_msg"
           git commit -m "$commit_msg"
           
+          # Get current branch name
+          current_branch=$(git branch --show-current)
+          echo "Current branch: $current_branch"
+          
           echo "Pulling latest changes before push..."
-          git pull origin main --rebase --no-edit || {
+          git pull origin "$current_branch" --rebase --no-edit || {
             echo "Pull failed, checking for conflicts..."
             git status
             exit 1
           }
           
-          echo "Pushing to remote..."
-          git push origin main || {
+          echo "Pushing to remote branch: $current_branch"
+          git push origin "$current_branch" || {
             echo "Push failed, checking status..."
             git status
             git log --oneline -5

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Unfolding - The Evolution of AI Organizations</title>
+    <style>
+        :root {
+            /* Colors */
+            --bcg-green: #40916c;
+            --bcg-white: #f4f4f4;
+            --bcg-black: #2f2f2f;
+            --bcg-light-gray: #dcdcdc;
+            --bcg-dark-gray: #6b6b6b;
+            --bcg-green-gradient: linear-gradient(135deg, #52b788 0%, #40916c 100%);
+
+            /* Typography */
+            --text-xs: 14px;
+            --text-sm: 16px;
+            --text-md: 18px;
+            --text-lg: 20px;
+            --text-xl: 24px;
+            --text-2xl: 28px;
+            --text-3xl: 36px;
+        }
+
+        /* 
+        * SLIDE THEMES - Apply to .slide-container to change entire slide appearance
+        * 
+        * Usage: <div class="slide-container slide-theme-white">
+        * 
+        * All themes automatically handle container, arrow, title, and text colors
+        */
+        .slide-theme-green {
+            --slide-bg-color: var(--bcg-green-gradient);
+            --section-bg-color: var(--bcg-white);
+            --normal-title-color: var(--bcg-white);
+            --panel-title-color: var(--bcg-green);
+            --section-title-color: var(--bcg-dark-gray);
+            --page-number-color: var(--bcg-light-gray);
+            --body-text-color: var(--bcg-black);
+        }
+
+        .slide-theme-white {
+            --slide-bg-color: var(--bcg-white);
+            --section-bg-color: var(--bcg-green-gradient);
+            --normal-title-color: var(--bcg-green);
+            --panel-title-color: var(--bcg-white);
+            --section-title-color: var(--bcg-dark-gray);
+            --body-text-color: var(--bcg-black);
+            --page-number-color: var(--bcg-dark-gray);
+        }
+
+        .slide-theme-gray {
+            --slide-bg-color: var(--bcg-light-gray);
+            --section-bg-color: var(--bcg-green-gradient);
+            --normal-title-color: var(--bcg-green);
+            --panel-title-color: var(--bcg-white);
+            --section-title-color: var(--bcg-dark-gray);
+            --body-text-color: var(--bcg-black);
+            --page-number-color: var(--bcg-dark-gray);
+        }
+
+        .slide-theme-dark {
+            --slide-bg-color: var(--bcg-black);
+            --section-bg-color: var(--bcg-green-gradient);
+            --normal-title-color: var(--bcg-green);
+            --panel-title-color: var(--bcg-white);
+            --section-title-color: var(--bcg-light-gray);
+            --body-text-color: var(--bcg-white);
+            --page-number-color: var(--bcg-light-gray);
+        }
+
+
+        /* Basic Setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-container {
+            width: 1600px;
+            height: 900px;
+            background: var(--slide-bg-color, var(--bcg-white));
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin: 20px;
+        }
+
+        /* Multi-section slides use grid layout */
+        .slide-container:has(.arrow-background-section-left),
+        .slide-container:has(.arrow-background-section-right),
+        .slide-container:has(.highlights-background-section-right) {
+            display: grid;
+            grid-template-columns: auto 1fr;
+        }
+
+        /* Agenda slide uses 1/3 - 2/3 layout */
+        .agenda-slide {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+        }
+
+        /* 
+        * SLIDE LAYOUT SECTIONS - Define slide structure and backgrounds
+        * 
+        * Choose the appropriate section type for your slide layout:
+        */
+
+        /* BASIC LAYOUT - Full-width single section (most common) 
+        * Usage: <div class="basic-background-section">
+        * Use for: Simple slides with title and content in one area */
+        .basic-background-section {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 40px;
+            padding-right: 60px;
+            padding-top: 50px;
+            padding-bottom: 30px;
+        }
+
+        /* LEFT ARROW SECTION - Left section with arrow pointing right
+        * Usage: <div class="arrow-background-section-left"> + <div class="arrow-background-section-right">
+        * Use for: Two-column layout with main content on left, highlights on right */
+        .arrow-background-section-left {
+            width: 600px;
+            background: var(--section-bg-color);
+            clip-path: polygon(0 0, 80% 0, 100% 50%, 80% 100%, 0 100%);
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            padding-right: 30%;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        /* RIGHT ARROW SECTION - Right section with arrow pointing left
+        * Usage: Pair with arrow-background-section-left for two-column arrow layout
+        * Use for: Key takeaways, highlights, or secondary content */
+        .arrow-background-section-right {
+            min-width: 600px;
+            background: var(--section-bg-color);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 20% 50%);
+            display: flex;
+            align-items: center;
+            padding-left: 30%;
+            padding-right: 60px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        /* RIGHT HIGHLIGHTS SECTION - Similar to arrow-right but no arrow shape
+        * Usage: <div class="highlights-background-section-right">
+        * Use for: Side panels, takeaways without arrow visual */
+        .highlights-background-section-right {
+            min-width: 600px;
+            background: var(--section-bg-color);
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            align-items: center;
+            padding-left: 50px;
+            padding-right: 60px;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        /* 
+        * AGENDA SLIDE LAYOUT - Special layout for agenda/chapter divider slides
+        * 
+        * Usage: Add "agenda-slide" class to slide-container
+        * <div class="slide-container slide-theme-white agenda-slide">
+        *   <div class="decorative-left-section">
+        *   <div class="main-content-section">
+        */
+
+        /* DECORATIVE LEFT SECTION - Image background with overlay
+        * Usage: <div class="decorative-left-section" style="background-image: url(...)">
+        * Use for: Visual left panel with title overlay */
+        .decorative-left-section {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+        }
+
+        .decorative-left-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bcg-green-gradient);
+            opacity: 0.7;
+            z-index: 1;
+        }
+
+        /* MAIN CONTENT SECTION - Right panel for agenda items
+        * Usage: <div class="main-content-section">
+        * Use for: Agenda items, chapter content on right side */
+        .main-content-section {
+            background: var(--bcg-white);
+            padding: 80px 100px 80px 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Grid Styles */
+
+        .content-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            width: 100%;
+        }
+
+        .content-grid-columns {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-columns, auto), auto);
+            gap: var(--grid-gap, 30px);
+            width: 100%;
+        }
+
+        .content-grid-rows {
+            display: grid;
+            grid-template-rows: repeat(var(--grid-rows, auto), auto);
+            gap: var(--grid-gap, 30px);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(var(--grid-columns, auto), auto);
+            grid-template-rows: repeat(var(--grid-rows, auto), auto);
+            gap: var(--grid-gap, 30px);
+            width: 100%;
+        }
+
+
+        /* Title Styles */
+
+        .normal-title {
+            color: var(--normal-title-color, var(--bcg-green));
+            font-size: var(--text-3xl);
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            width: 100%;
+            margin-bottom: 30px;
+            align-self: flex-start;
+        }
+
+        .arrow-title { /* For use with title-sections */
+            color: var(--panel-title-color, var(--bcg-white));
+            font-size: var(--text-3xl);
+            font-weight: 300;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .section-title {
+            color: var(--section-title-color, var(--bcg-green));
+            font-size: var(--text-xl);
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+
+        .section-title-with-icon {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .left-section-title {
+            text-align: left;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Divider Styles */
+
+        .divider {
+            width: 100%;
+            height: 2px;
+            background-color: var(--section-title-color, var(--bcg-dark-gray));
+            margin-bottom: 15px;
+            margin-top: 5px;
+        }
+
+        /* Text Box Styles */
+
+        .bullet-point {
+            display: block;
+            margin-bottom: 10px;
+            padding-left: 35px;
+            text-indent: -35px;
+            color: var(--body-text-color, var(--bcg-gray));
+            font-size: var(--text-md);
+            line-height: 1.4;
+        }
+
+        .bullet-point::before {
+            content: '•';
+            color: var(--body-text-color, var(--bcg-gray));
+            font-size: var(--text-md);
+            font-weight: bold;
+            margin-right: 15px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            hyphens: auto;
+        }
+
+        .bullet-point-compact::before {
+            content: '•';
+            color: var(--body-text-color, var(--bcg-gray));
+            font-size: var(--text-md);
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .callout-box {
+            position: relative;
+            border-right: 2px dashed var(--normal-title-color);
+            border-bottom: 2px dashed var(--normal-title-color);
+            border-top: 2px dashed var(--normal-title-color);
+            padding: 10px 30px;
+            margin: 30px 0;
+            border-radius: 4px;
+            color: var(--section-title-color);
+            border-radius: 10px;
+            font-size: var(--text-sm);
+            line-height: 1.4;
+            font-weight: 700;
+            font-style: italic;
+        }
+
+        .callout-box::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 16px;
+            height: 100%;
+            background-color: var(--normal-title-color);
+            clip-path: polygon(0% 20%, 100% 50%, 0% 80%);
+        }
+
+        .standard-text {
+            flex: 1;
+            color: var(--body-text-color);
+            font-size: var(--text-lg);
+            line-height: 1.4;
+        }
+
+        .text-bold {
+            font-weight: 700;
+        }
+
+        .text-with-icon-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* Agenda Items Styles */
+
+        .agenda-items {
+            margin-top: 60px;
+        }
+
+        .agenda-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+            font-size: var(--text-xl);
+            line-height: 1.4;
+        }
+
+        .agenda-arrow {
+            width: 40px;
+            height: 40px;
+            margin-right: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .agenda-item.active {
+            color: var(--bcg-green);
+            font-weight: 600;
+        }
+
+        .agenda-item.active .agenda-arrow {
+            background-color: var(--bcg-green);
+            color: white;
+        }
+
+        .agenda-item.inactive {
+            color: var(--bcg-dark-gray);
+            opacity: 0.6;
+        }
+
+        .agenda-item.inactive .agenda-arrow {
+            background-color: var(--bcg-light-gray);
+            color: var(--bcg-dark-gray);
+        }
+
+        /* Basic Elements Styles */
+
+        .page-number {
+            position: absolute;
+            bottom: 30px;
+            right: 60px;
+            color: var(--page-number-color);
+            font-size: var(--text-xs);
+        }
+
+        .footnote {
+            position: absolute;
+            bottom: 30px;
+            left: 60px;
+            color: var(--page-number-color);
+            font-size: var(--text-xs);
+        }
+
+        /* Icon Styles */
+
+        .icon-and-number-ball {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bcg-green);
+            color: var(--bcg-text-color);
+            border-radius: 50%;
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .icon-simple {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bcg-text-color);
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .icon-title {
+            display: block;
+            font-size: 100px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .icon-title::after {
+            content: '\A';
+            white-space: pre-line;
+        }
+
+        .icon-and-number-ball-inline {
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--section-title-color);
+            border: 2px solid var(--section-title-color);
+            border-radius: 50%;
+            font-size: var(--text-lg);
+            font-weight: 300;
+        }
+
+        /* Chevron Elements */
+
+        .chevron-leftmost {
+            min-width: 100px;
+            background: var(--section-bg-color);
+            clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 10px 5% 10px 5%;
+            margin: 0 -20px 20px 0;
+            text-align: left;
+        }
+
+        .chevron-continuing {
+            min-width: 100px;
+            background: var(--section-bg-color);
+            clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%, 15% 50%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 10px 5% 10px 20%;
+            margin: 0 -20px 20px -20px;
+            text-align: left;
+        }
+
+        /* Insight Box Styles */
+
+        .insight-box {
+            padding: 20px;
+            border: 2px dotted var(--bcg-dark-gray);
+            border-radius: 10px;
+            background: transparent;
+        }
+
+        /* Note Box Style for Notes like Last Updated */
+
+        .top-right-note-box {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--normal-title-color);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: var(--text-xs);
+            font-weight: 500;
+            z-index: 10;
+        }
+
+        /* 
+        * THEME UTILITY CLASSES - Shorter aliases for theme switching
+        * 
+        * Usage: <div class="slide-container theme-white">
+        * 
+        * Same functionality as slide-theme-* classes but with shorter names:
+        * - theme-white: Same as slide-theme-white
+        * - theme-green: Same as slide-theme-green  
+        * - theme-gray: Same as slide-theme-gray
+        * - theme-dark: Same as slide-theme-dark
+        */
+
+        .theme-white { 
+            --slide-bg-color: var(--bcg-white);
+            --section-bg-color: var(--bcg-green-gradient);
+            --normal-title-color: var(--bcg-green);
+            --panel-title-color: var(--bcg-white);
+            --section-title-color: var(--bcg-dark-gray);
+            --body-text-color: var(--bcg-black);
+            --page-number-color: var(--bcg-dark-gray);
+        }
+
+        .theme-green { 
+            --slide-bg-color: var(--bcg-green-gradient);
+            --section-bg-color: var(--bcg-white);
+            --normal-title-color: var(--bcg-white);
+            --panel-title-color: var(--bcg-green);
+            --section-title-color: var(--bcg-dark-gray);
+            --page-number-color: var(--bcg-light-gray);
+            --body-text-color: var(--bcg-black);
+        }
+
+        .theme-gray { 
+            --slide-bg-color: var(--bcg-light-gray);
+            --section-bg-color: var(--bcg-green-gradient);
+            --normal-title-color: var(--bcg-green);
+            --panel-title-color: var(--bcg-white);
+            --section-title-color: var(--bcg-dark-gray);
+            --body-text-color: var(--bcg-black);
+            --page-number-color: var(--bcg-dark-gray);
+        }
+
+        .theme-dark { 
+            --slide-bg-color: var(--bcg-black);
+            --section-bg-color: var(--bcg-green-gradient);
+            --normal-title-color: var(--bcg-green);
+            --panel-title-color: var(--bcg-white);
+            --section-title-color: var(--bcg-light-gray);
+            --body-text-color: var(--bcg-white);
+            --page-number-color: var(--bcg-light-gray);
+        }
+
+        /* Utility Classes for Common Spacing */
+
+        .margin-sm {
+            margin-bottom: 10px;
+        }
+
+        .margin-md {
+            margin-bottom: 20px;
+        }
+
+        .margin-lg {
+            margin: 30px;
+        }
+
+        /* Corner Triangle for Chapter Tracking */
+        .corner-triangle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 120px 120px 0;
+            border-color: transparent var(--normal-title-color) transparent transparent;
+            z-index: 10;
+        }
+
+        .corner-triangle i {
+            position: absolute;
+            top: 20px;
+            right: -100px;
+            color: var(--slide-bg-color);
+            font-size: 40px;
+        }
+
+        /* Chapter Title */
+        .corner-triangle-title {
+            position: absolute;
+            top: 30px;
+            right: 120px;
+            color: var(--page-number-color);
+            font-size: var(--text-sm);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+
+        /* Title Slide Styles */
+        .slide-theme-title {
+            background: linear-gradient(135deg, #2d5a45 0%, #1a3d2e 50%, #0f2419 100%);
+            position: relative;
+        }
+
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1503642551022-c011aafb3c88?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+        }
+
+        .title-slide-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 100%;
+            padding: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-overlay-box {
+            background: var(--bcg-green-gradient);
+            padding: 140px 120px 120px 120px;
+            margin: 120px 0 0 120px;
+            max-width: 1000px;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .main-title {
+            color: white;
+            font-size: 72px;
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 40px;
+        }
+
+        .subtitle {
+            color: white;
+            font-size: var(--text-2xl);
+            font-weight: 300;
+            margin-bottom: 0;
+        }
+
+        .white-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: white;
+            z-index: 3;
+            display: flex;
+            align-items: center;
+        }
+
+        .title-slide .date-stamp {
+            margin-left: 240px;
+            color: var(--bcg-dark-gray);
+            font-size: var(--text-lg);
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="slide-container slide-theme-title title-slide">
+        <div class="background-overlay"></div>
+        <div class="title-slide-container">
+            <div class="content-overlay-box">
+                <h1 class="main-title">Future Unfolding - The Evolution of AI Organizations</h1>
+                <div class="subtitle">Long deck</div>
+            </div>
+        </div>
+        
+        <div class="white-footer">
+            <div class="date-stamp">JUN 2024</div>
+        </div>
+    </div>
+</body>
+</html> 

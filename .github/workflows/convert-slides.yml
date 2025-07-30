@@ -41,7 +41,7 @@ jobs:
           npm install puppeteer@^24.15.0 pdf-lib@^1.17.1
         fi
 
-    - name: Install Chrome dependencies
+    - name: Install Chrome dependencies and Google Chrome
       run: |
         sudo apt-get update
         sudo apt-get install -y \
@@ -50,19 +50,27 @@ jobs:
           ca-certificates \
           procps \
           libxss1 \
-          libgconf-2-4 \
           libxrandr2 \
-          libasound2 \
+          libasound2t64 \
           libpangocairo-1.0-0 \
           libatk1.0-0 \
           libcairo-gobject2 \
           libgtk-3-0 \
-          libgdk-pixbuf2.0-0
-
-    - name: Install Google Chrome
-      run: |
-        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+          libgdk-pixbuf2.0-0 \
+          libdrm2 \
+          libxcomposite1 \
+          libxdamage1 \
+          libxfixes3 \
+          libxss1 \
+          libxtst6 \
+          libatspi2.0-0 \
+          libappindicator3-1 \
+          libnss3 \
+          lsb-release
+        
+        # Install Google Chrome using the modern method
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg
+        echo "deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list > /dev/null
         sudo apt-get update
         sudo apt-get install -y google-chrome-stable
 

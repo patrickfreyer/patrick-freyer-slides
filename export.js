@@ -301,8 +301,9 @@ export async function convertHtmlToPdf(browser, htmlFilePath, outputPath, config
     await page.close();
     
     // Save PDF to local file system
+    const fileExists = fs.existsSync(outputPath);
     fs.writeFileSync(outputPath, pdfBuffer);
-    console.log(`✓ Created: ${outputPath}`);
+    console.log(`✓ ${fileExists ? 'Updated' : 'Created'}: ${outputPath}`);
     
     return { 
       fileName: path.basename(outputPath), 
@@ -363,8 +364,9 @@ export async function convertHtmlToImage(browser, htmlFilePath, outputPath, conf
     await page.close();
     
     // Save image to local file system
+    const fileExists = fs.existsSync(outputPath);
     fs.writeFileSync(outputPath, imageBuffer);
-    console.log(`✓ Created: ${outputPath}`);
+    console.log(`✓ ${fileExists ? 'Updated' : 'Created'}: ${outputPath}`);
     
     return { 
       fileName: path.basename(outputPath), 

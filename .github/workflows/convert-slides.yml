@@ -30,7 +30,6 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
 
     - name: Install dependencies
       run: |
@@ -38,8 +37,8 @@ jobs:
           echo "Found package-lock.json, using npm ci"
           npm ci
         else
-          echo "No package-lock.json found, using npm install"
-          npm install
+          echo "No package-lock.json found, installing puppeteer and pdf-lib directly"
+          npm install puppeteer@^24.15.0 pdf-lib@^1.17.1
         fi
 
     - name: Install Chrome dependencies

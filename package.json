@@ -1,0 +1,25 @@
+{
+  "name": "patrick-freyer-slides",
+  "version": "1.0.0",
+  "description": "HTML slide creation with automated conversion to images and PDFs",
+  "main": "export.js",
+  "type": "module",
+  "scripts": {
+    "convert": "node export.js slides",
+    "convert-sample": "node export.js sample-slides"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1",
+    "puppeteer": "^21.11.0"
+  },
+  "keywords": [
+    "slides",
+    "html",
+    "pdf",
+    "image",
+    "presentation",
+    "bcg"
+  ],
+  "author": "Patrick Freyer",
+  "license": "MIT"
+}

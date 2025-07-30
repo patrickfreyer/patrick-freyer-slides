@@ -1,0 +1,130 @@
+name: Convert HTML Slides to Images and PDFs
+
+on:
+  push:
+    paths:
+      - 'slides/*.html'
+  pull_request:
+    paths:
+      - 'slides/*.html'
+  workflow_dispatch:
+
+jobs:
+  convert-slides:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: |
+        npm init -y
+        npm install puppeteer pdf-lib
+
+    - name: Install Chrome dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          wget \
+          gnupg \
+          ca-certificates \
+          procps \
+          libxss1 \
+          libgconf-2-4 \
+          libxrandr2 \
+          libasound2 \
+          libpangocairo-1.0-0 \
+          libatk1.0-0 \
+          libcairo-gobject2 \
+          libgtk-3-0 \
+          libgdk-pixbuf2.0-0
+
+    - name: Install Google Chrome
+      run: |
+        wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
+        sudo apt-get update
+        sudo apt-get install -y google-chrome-stable
+
+    - name: Check for HTML files in slides directory
+      id: check-files
+      run: |
+        if [ "$(find slides -name '*.html' | wc -l)" -gt 0 ]; then
+          echo "has_html_files=true" >> $GITHUB_OUTPUT
+          echo "Found HTML files to convert:"
+          find slides -name '*.html'
+        else
+          echo "has_html_files=false" >> $GITHUB_OUTPUT
+          echo "No HTML files found in slides directory"
+        fi
+
+    - name: Convert HTML slides to images and PDFs
+      if: steps.check-files.outputs.has_html_files == 'true'
+      run: |
+        node export.js slides
+      env:
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+        PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
+
+    - name: Check for generated files
+      if: steps.check-files.outputs.has_html_files == 'true'
+      run: |
+        echo "Generated files:"
+        find slides -name '*.png' -o -name '*.pdf' | sort
+
+    - name: Commit generated files
+      if: steps.check-files.outputs.has_html_files == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        
+        # Add generated files
+        git add slides/*.png slides/*.pdf 2>/dev/null || true
+        
+        # Check if there are changes to commit
+        if git diff --staged --quiet; then
+          echo "No new files to commit"
+        else
+          git commit -m "Auto-generate images and PDFs from HTML slides
+
+          🤖 Generated with GitHub Actions
+          
+          Co-Authored-By: GitHub Action <action@github.com>"
+          
+          git push
+        fi
+
+    - name: Create summary
+      if: steps.check-files.outputs.has_html_files == 'true'
+      run: |
+        echo "## Slide Conversion Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Generated Files:" >> $GITHUB_STEP_SUMMARY
+        
+        html_count=$(find slides -name '*.html' | wc -l)
+        png_count=$(find slides -name '*.png' | wc -l)
+        pdf_count=$(find slides -name '*.pdf' | wc -l)
+        
+        echo "- 📄 HTML slides: $html_count" >> $GITHUB_STEP_SUMMARY
+        echo "- 🖼️  PNG images: $png_count" >> $GITHUB_STEP_SUMMARY
+        echo "- 📋 PDF files: $pdf_count" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        
+        if [ $html_count -gt 0 ]; then
+          echo "### Processed Files:" >> $GITHUB_STEP_SUMMARY
+          for file in slides/*.html; do
+            if [ -f "$file" ]; then
+              basename=$(basename "$file" .html)
+              echo "- \`$file\` → \`slides/${basename}.png\` + \`slides/${basename}.pdf\`" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+        fi

@@ -99,6 +99,12 @@ jobs:
       run: |
         echo "Generated files:"
         find slides -name '*.png' -o -name '*.pdf' -type f | sort
+        echo ""
+        echo "All files in slides directory:"
+        find slides -type f | sort
+        echo ""
+        echo "Git status before commit:"
+        git status
 
     - name: Commit generated files
       if: steps.check-files.outputs.has_html_files == 'true'
@@ -107,18 +113,27 @@ jobs:
         git config --local user.name "GitHub Action"
         
         # Add generated files (including in subdirectories)
-        find slides -name '*.png' -o -name '*.pdf' -type f | xargs git add 2>/dev/null || true
+        echo "Adding generated files to git..."
+        find slides -name '*.png' -o -name '*.pdf' -type f | while read file; do
+          echo "Adding: $file"
+          git add "$file"
+        done
         
         # Check if there are changes to commit
+        echo "Git status after adding files:"
+        git status
+        
         if git diff --staged --quiet; then
           echo "No new files to commit"
         else
+          echo "Committing generated files..."
           git commit -m "Auto-generate images and PDFs from HTML slides
 
           🤖 Generated with GitHub Actions
           
           Co-Authored-By: GitHub Action <action@github.com>"
           
+          echo "Pushing to remote..."
           git push
         fi
 

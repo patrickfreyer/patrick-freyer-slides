@@ -40,7 +40,7 @@ jobs:
           npm ci
         else
           echo "No package-lock.json found, installing puppeteer and pdf-lib directly"
-          npm install puppeteer@^24.15.0 pdf-lib@^1.17.1
+          npm install puppeteer@^21.6.1 pdf-lib@^1.17.1
         fi
 
     - name: Install Chrome dependencies and Google Chrome

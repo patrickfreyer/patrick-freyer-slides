@@ -251,7 +251,7 @@ export async function convertHtmlToPdf(browser, htmlFilePath, outputPath, config
     await new Promise(resolve => setTimeout(resolve, 5000));
     
     // Additional wait for any lazy-loaded content
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await page.waitForTimeout(2000);
     
     // Wait for fonts to finish loading
     await page.evaluate(() => {
